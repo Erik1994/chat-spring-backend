@@ -1,4 +1,4 @@
-package com.chat.learning.user.domain.model
+package com.chat.learning.domain.model
 
 data class AuthenticatedUser(
     val user: User,

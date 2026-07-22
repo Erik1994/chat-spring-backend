@@ -1,4 +1,4 @@
-package com.chat.learning.user.domain.model
+package com.chat.learning.domain.model
 
 import java.util.UUID
 
