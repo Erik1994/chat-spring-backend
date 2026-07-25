@@ -1,4 +1,4 @@
-package com.chat.learning.service
+package com.chat.learning.service.auth
 
 import com.chat.learning.domain.exception.UserAlreadyExistsException
 import com.chat.learning.domain.model.User

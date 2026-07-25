@@ -3,7 +3,7 @@ package com.chat.learning.api.controllers
 import com.chat.learning.api.dto.RegisterRequest
 import com.chat.learning.api.dto.UserDto
 import com.chat.learning.api.mappers.toUserDto
-import com.chat.learning.service.AuthService
+import com.chat.learning.service.auth.AuthService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

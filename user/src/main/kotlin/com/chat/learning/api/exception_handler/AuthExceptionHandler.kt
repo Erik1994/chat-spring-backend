@@ -1,5 +1,6 @@
 package com.chat.learning.api.exception_handler
 
+import com.chat.learning.domain.exception.InvalidTokenException
 import com.chat.learning.domain.exception.UserAlreadyExistsException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -16,6 +17,12 @@ class AuthExceptionHandler {
     fun onUserAlreadyExistsException(
         exception: UserAlreadyExistsException,
     ) = mapOf("code" to "USER_ALREADY_EXISTS", "message" to exception.message)
+
+    @ExceptionHandler(InvalidTokenException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun onUserAlreadyExistsException(
+        exception: InvalidTokenException,
+    ) = mapOf("code" to "INVALID_TOKEN", "message" to exception.message)
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun onValidationException(
