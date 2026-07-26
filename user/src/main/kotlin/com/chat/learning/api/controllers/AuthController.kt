@@ -1,7 +1,10 @@
 package com.chat.learning.api.controllers
 
+import com.chat.learning.api.dto.AuthenticatedUserDto
+import com.chat.learning.api.dto.LoginRequest
 import com.chat.learning.api.dto.RegisterRequest
 import com.chat.learning.api.dto.UserDto
+import com.chat.learning.api.mappers.toAuthenticatedUserDto
 import com.chat.learning.api.mappers.toUserDto
 import com.chat.learning.service.auth.AuthService
 import jakarta.validation.Valid
@@ -24,4 +27,14 @@ class AuthController (
         username = body.username,
         password = body.password,
     ).toUserDto()
+
+    @PostMapping("/login")
+    fun login(
+        @RequestBody body: LoginRequest,
+    ): AuthenticatedUserDto {
+        return authService.login(
+            email = body.email,
+            password = body.password,
+        ).toAuthenticatedUserDto()
+    }
 }
