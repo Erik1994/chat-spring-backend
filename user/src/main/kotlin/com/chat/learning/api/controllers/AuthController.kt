@@ -2,6 +2,7 @@ package com.chat.learning.api.controllers
 
 import com.chat.learning.api.dto.AuthenticatedUserDto
 import com.chat.learning.api.dto.LoginRequest
+import com.chat.learning.api.dto.RefreshRequest
 import com.chat.learning.api.dto.RegisterRequest
 import com.chat.learning.api.dto.UserDto
 import com.chat.learning.api.mappers.toAuthenticatedUserDto
@@ -36,5 +37,21 @@ class AuthController (
             email = body.email,
             password = body.password,
         ).toAuthenticatedUserDto()
+    }
+
+    @PostMapping("/refresh")
+    fun refresh(
+        @RequestBody body: RefreshRequest,
+    ) : AuthenticatedUserDto {
+        return authService.refreshToken(
+            refreshToken = body.refreshToken,
+        ).toAuthenticatedUserDto()
+    }
+
+    @PostMapping("/logout")
+    fun logout(
+        @RequestBody body: RefreshRequest,
+    ) {
+        authService.logout(body.refreshToken)
     }
 }
