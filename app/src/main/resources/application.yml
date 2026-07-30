@@ -34,3 +34,9 @@ spring:
 
 jwt:
   secret: ${JWT_SECRET_BASE64}
+
+
+chat:
+  email:
+    verification:
+      expiry-hours: 24

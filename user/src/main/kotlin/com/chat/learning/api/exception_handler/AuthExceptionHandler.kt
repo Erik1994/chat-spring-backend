@@ -1,5 +1,6 @@
 package com.chat.learning.api.exception_handler
 
+import com.chat.learning.domain.exception.EmailNotVerifiedException
 import com.chat.learning.domain.exception.InvalidCredentialsException
 import com.chat.learning.domain.exception.InvalidTokenException
 import com.chat.learning.domain.exception.UserAlreadyExistsException
@@ -32,6 +33,15 @@ class AuthExceptionHandler {
         e: InvalidCredentialsException
     ) = mapOf(
         "code" to "INVALID_CREDENTIALS",
+        "message" to e.message
+    )
+
+    @ExceptionHandler(EmailNotVerifiedException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun onEmailNotVerified(
+        e: EmailNotVerifiedException
+    ) = mapOf(
+        "code" to "EMAIL_NOT_VERIFIED",
         "message" to e.message
     )
 

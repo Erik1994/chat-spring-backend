@@ -1,5 +1,6 @@
 package com.chat.learning.service.auth
 
+import com.chat.learning.domain.exception.EmailNotVerifiedException
 import com.chat.learning.domain.exception.InvalidCredentialsException
 import com.chat.learning.domain.exception.InvalidTokenException
 import com.chat.learning.domain.exception.UserAlreadyExistsException
@@ -26,23 +27,29 @@ class AuthService(
     private val passwordEncoder: PasswordEncoder,
     private val jwtService: JwtService,
     private val refreshTokenRepository: RefreshTokenRepository,
+    private val emailVerificationService: EmailVerificationService,
 ) {
+    @Transactional
     fun register(email: String, username: String, password: String): User {
+        val (trimmedEmail, trimmedUsername) = email.trim() to username.trim()
         val user = userRepository.findByEmailOrUsername(
-            email = email.trim(),
-            username = username.trim(),
+            email = trimmedEmail,
+            username = trimmedUsername,
         )
         if (user != null) {
             throw UserAlreadyExistsException()
         }
 
-        val savedUser = userRepository.save(
+        val savedUser = userRepository.saveAndFlush(
             UserEntity(
-                email = email.trim(),
-                username = username.trim(),
+                email = trimmedEmail,
+                username = trimmedUsername,
                 hashedPassword = passwordEncoder.encode(password),
             )
         ).toUser()
+
+        emailVerificationService.createVerificationToken(trimmedEmail)
+
         return savedUser
     }
 
@@ -56,7 +63,7 @@ class AuthService(
         }
 
         if (user.hasEmailVerified.not()) {
-            //TODO: Check if the user has verified their email
+            throw EmailNotVerifiedException()
         }
 
         return user.id?.let {
