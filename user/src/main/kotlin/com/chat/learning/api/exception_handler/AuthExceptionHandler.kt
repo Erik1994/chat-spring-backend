@@ -3,6 +3,7 @@ package com.chat.learning.api.exception_handler
 import com.chat.learning.domain.exception.EmailNotVerifiedException
 import com.chat.learning.domain.exception.InvalidCredentialsException
 import com.chat.learning.domain.exception.InvalidTokenException
+import com.chat.learning.domain.exception.SamePasswordException
 import com.chat.learning.domain.exception.UserAlreadyExistsException
 import com.chat.learning.domain.exception.UserNotFoundException
 import org.springframework.http.HttpStatus
@@ -42,6 +43,15 @@ class AuthExceptionHandler {
         e: EmailNotVerifiedException
     ) = mapOf(
         "code" to "EMAIL_NOT_VERIFIED",
+        "message" to e.message
+    )
+
+    @ExceptionHandler(SamePasswordException::class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    fun onSamePassword(
+        e: SamePasswordException
+    ) = mapOf(
+        "code" to "SAME_PASSWORD",
         "message" to e.message
     )
 

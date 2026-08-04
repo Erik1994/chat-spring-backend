@@ -1,12 +1,16 @@
 package com.chat.learning.api.controllers
 
 import com.chat.learning.api.dto.AuthenticatedUserDto
+import com.chat.learning.api.dto.ChangePasswordRequest
+import com.chat.learning.api.dto.EmailRequest
 import com.chat.learning.api.dto.LoginRequest
 import com.chat.learning.api.dto.RefreshRequest
 import com.chat.learning.api.dto.RegisterRequest
+import com.chat.learning.api.dto.ResetPasswordRequest
 import com.chat.learning.api.dto.UserDto
 import com.chat.learning.api.mappers.toAuthenticatedUserDto
 import com.chat.learning.api.mappers.toUserDto
+import com.chat.learning.service.PasswordResetService
 import com.chat.learning.service.auth.AuthService
 import com.chat.learning.service.auth.EmailVerificationService
 import jakarta.validation.Valid
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController
 class AuthController (
     private val authService: AuthService,
     private val emailVerificationService: EmailVerificationService,
+    private val passwordResetService: PasswordResetService,
 ) {
 
     @PostMapping("/register")
@@ -64,5 +69,29 @@ class AuthController (
         @RequestParam token: String,
     ) {
         emailVerificationService.verifyEmail(token)
+    }
+
+    @PostMapping("forgot-password")
+    fun forgotPassword(
+        @Valid @RequestBody body: EmailRequest,
+    ) {
+        passwordResetService.requestPasswordReset(body.email)
+    }
+
+    @PostMapping("/reset-password")
+    fun resetPassword(
+        @Valid @RequestBody body: ResetPasswordRequest,
+    ) {
+        passwordResetService.resetPassword(
+            token = body.token,
+            password = body.newPassword,
+        )
+    }
+
+    @PostMapping("/change-password")
+    fun changePassword(
+        @Valid @RequestBody body: ChangePasswordRequest,
+    ) {
+       // TODO: Extract user id from the request and call service
     }
 }
